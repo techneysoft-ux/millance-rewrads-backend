@@ -1,0 +1,134 @@
+MILLANCE REWARDS BACKEND SETUP GUIDE
+=====================================
+
+Prerequisites:
+--------------
+1. Python 3.8+ installed
+2. PostgreSQL installed and running
+3. Database 'millancerewards' created with password '123456'
+
+Setup Steps:
+------------
+
+1. CREATE POSTGRESQL DATABASE:
+   - Open pgAdmin or psql
+   - Create database: millancerewards
+   - Set password: 123456
+   - Or run: createdb millancerewards
+
+2. INSTALL PYTHON DEPENDENCIES:
+   cd backend
+   pip install -r requirements.txt
+
+3. INITIALIZE DATABASE:
+   python init_db.py
+
+4. START THE SERVER:
+   python main.py
+   
+   OR use the batch file:
+   start.bat
+
+Server Details:
+---------------
+- URL: http://localhost:8002
+- API Docs: http://localhost:8002/docs
+- Database: millancerewards
+- Port: 8002
+
+Default Login Credentials:
+--------------------------
+Admin:
+  Email: admin@millancefurniture.com
+  Password: millance
+
+Franchise:
+  Email: franchise@millancefurniture.com
+  Password: millance
+
+User:
+  Email: user@millancefurniture.com
+  Password: millance
+  (MLD ID will be auto-generated, check after first login)
+
+API Endpoints:
+--------------
+
+AUTH:
+- POST /api/auth/login - Login (email/MLD ID + password)
+- POST /api/auth/register - Register new user
+
+USER:
+- GET /api/users/me - Get current user info
+- GET /api/users/wallet - Get wallet balance
+- POST /api/users/wallet/deposit - Deposit to wallet
+- GET /api/users/transactions - Get transaction history
+
+FRANCHISE:
+- POST /api/franchise/prize-pools - Create prize pool (up to 15 prizes)
+- GET /api/franchise/prize-pools - Get franchise prize pools
+- POST /api/franchise/plans - Create plan
+- POST /api/franchise/groups - Create group (auto-generates group_id)
+- GET /api/franchise/groups - Get franchise groups
+
+PLANS & GROUPS:
+- GET /api/plans - Get all active plans
+- GET /api/plans/{plan_id} - Get plan details
+- GET /api/groups/{group_id} - Get group details
+
+ENROLLMENTS:
+- POST /api/enrollments - Enroll in plan (using wallet)
+- GET /api/enrollments/my - Get my enrollments
+
+PAYMENTS:
+- POST /api/payments - Make monthly payment
+- GET /api/payments/my - Get my payment history
+
+Features:
+---------
+✓ User authentication with Email or MLD ID
+✓ Three user roles: Admin, Franchise, User
+✓ Two wallets per user: Millance Rewards & Savings
+✓ Franchise can create prize pools (up to 15 prizes)
+✓ Franchise can create groups with auto-generated Group IDs
+✓ Users enroll in plans using their wallets
+✓ Monthly payment system
+✓ Transaction history tracking
+✓ JWT token authentication
+✓ Plain text passwords (NO hashing)
+
+Database Tables:
+----------------
+- users (with MLD ID, email, 2 wallets)
+- admins (admin credentials)
+- franchises (franchise management)
+- prize_pools (up to 15 prizes each)
+- plans (plan configurations)
+- groups (with auto-generated group_id)
+- enrollments (user plan subscriptions)
+- payments (monthly payment records)
+- transactions (wallet transaction log)
+- draws (lucky draw results)
+
+Troubleshooting:
+----------------
+1. If port 8002 is busy, change PORT in .env file
+2. If database connection fails, check PostgreSQL is running
+3. If tables not created, run: python init_db.py
+4. Check logs for detailed error messages
+
+Testing:
+--------
+1. Visit http://localhost:8002/docs for interactive API documentation
+2. Use the /api/auth/login endpoint to get access token
+3. Copy token and use "Authorize" button in Swagger UI
+4. Test all endpoints with authentication
+
+Notes:
+------
+- All passwords are hashed using bcrypt
+- JWT tokens expire in 30 minutes
+- MLD IDs are 6-digit random numbers
+- Group IDs are 4-character alphanumeric codes
+- All monetary values are in INR
+- Dates are stored in UTC
